@@ -8,5 +8,7 @@ urlpatterns = [
     path('Tourlist', views.TouristListView.as_view(), name='Touristplaces'),
     path('FormforDestination', views.DestinationCreateView.as_view(), name='DestinationForm'),
     path('FormforTouristplaces', views.TouristPlacesCreateView.as_view(), name='TouristplacesForm'),
+    path('Destination_update/<int:pk>', views.DestinationUpdateView.as_view(), name='Destination_update'),
+
 
 ]

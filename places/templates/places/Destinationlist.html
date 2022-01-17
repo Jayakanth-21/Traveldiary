@@ -1,31 +1,41 @@
-
 {% extends "places/base.html" %}
 
 {% block content %}
+<style>
+    .wrapper {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      grid-auto-rows: minmax(100px, auto);
+    }
+  </style>
 
-<ul>
-{% for dest in object_list %}
-   <li> {{ dest|upper }}  {{ dest }} {{ dest.why_this_place }} </li>
-{% endfor %}
-</ul>
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Destination</th>
-      <th scope="col">Why this place</th>
-      <th scope="col">Handle</th>
-    </tr>
-  </thead>
-  <tbody>
-  {% for dest in object_list %}
-    <tr>
-      <th scope="row">{{forloop.counter}}</th>
-      <td>{{ dest|upper }}</td>
-      <td>{{ dest.why_this_place|upper }}</td>
-      <td></td>
-    </tr>
-  {% endfor %}
-  </tbody>
-</table>
+<div class="row">
+    <div class="col">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Destination</th>
+                <th scope="col">Why this place</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            {% for dest in object_list %}
+            <tr>
+                <th scope="row">{{forloop.counter}}</th>
+                <td class="dest_name"><a href="{% url 'Destination_update' dest.pk %}"> {{ dest|upper }} </a></td>
+                <td>{{ dest.why_this_place|upper }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col">
+        <div id="img_col" class="wrapper"></div>
+    </div>
+</div>
+{% load static %}
+<script src="{% static 'places/js/search_images.js' %}"></script>
 {% endblock %}
