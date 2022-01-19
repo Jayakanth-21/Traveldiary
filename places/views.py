@@ -5,7 +5,9 @@ from django.views.generic.list import ListView
 from .models import Destination, TouristPlaces
 from django.views.generic.edit import CreateView
 from django.views.generic.edit import UpdateView
+from django.views.generic.edit import DeleteView
 from django.urls import reverse_lazy
+from .forms import DestinationForm
 
 
 def index(request):
@@ -39,18 +41,19 @@ class TouristListView(ListView):
 
 class DestinationCreateView(CreateView):
 
+    form_class = DestinationForm
     model = Destination
-    fields = ['name_of_the_place','budget', 'why_this_place', 'already_visited','add_field']
+    # fields = ['name_of_the_place','budget', 'why_this_place', 'already_visited','add_field']
     # fields = '__all__' (It displays all the fields inside the class")
     success_url = reverse_lazy('index')
 
-    def form_valid(self, form):
-        t_count = Destination.objects.count()
-        if t_count >= 10:
-            print("only 10 allowed")
-
-        else:
-            return super().form_valid(form)
+    # def form_valid(self, form):
+    #     t_count = Destination.objects.count()
+    #     if t_count >= 10:
+    #         print("only 10 allowed")
+    #
+    #     else:
+    #         return super().form_valid(form)
 
 
 
@@ -78,3 +81,8 @@ class DestinationUpdateView(UpdateView):
     # template_name_suffix = '_update_form' (The UpdateView page displayed to a GET request uses a template_name_suffix of '_form')
     template_name = 'places/Destination_update_form.html'
     success_url = reverse_lazy('index')
+
+class DestinationDelteview(DeleteView):
+
+    model = Destination
+    success_url = reverse_lazy('destinationlist')

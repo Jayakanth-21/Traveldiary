@@ -1,6 +1,7 @@
 {% extends "places/base.html" %}
 
 {% block content %}
+<!--Destination file start-->
 <style>
     .wrapper {
       display: grid;
@@ -9,6 +10,7 @@
       grid-auto-rows: minmax(100px, auto);
     }
   </style>
+
 
 <div class="row">
     <div class="col">
@@ -27,6 +29,8 @@
                 <th scope="row">{{forloop.counter}}</th>
                 <td class="dest_name"><a href="{% url 'Destination_update' dest.pk %}"> {{ dest|upper }} </a></td>
                 <td>{{ dest.why_this_place|upper }}</td>
+                <td><a href="{% url 'Destination_delete' dest.pk %}"> delete </a></td>
+
             </tr>
             {% endfor %}
             </tbody>
@@ -36,6 +40,17 @@
         <div id="img_col" class="wrapper"></div>
     </div>
 </div>
+
+{% for dest in object_list %}
+<div class="card text-white bg-success mb-3" style="max-width: 18rem;">
+  <div class="card-header">Header</div>
+  <div class="card-body">
+    <h5 class="card-title"><a href="{% url 'Destination_update' dest.pk %}"> {{ dest|upper }} </a></h5>
+    <p class="card-text">{{ dest.why_this_place|upper }}</p>
+  </div>
+</div>
+
+{% endfor %}
 {% load static %}
 <script src="{% static 'places/js/search_images.js' %}"></script>
 {% endblock %}

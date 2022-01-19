@@ -7,7 +7,21 @@
 
     <form method="post">{% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="Save">
+<!--        <div class="row shadow-lg">-->
+<!--        <div class="col-2 border ">-->
+<!--        <div class="bg-success">-->
+<!--            {{ form.name_of_the_place.label }}-->
+<!--            {{ form.name_of_the_place }}-->
+<!--            </div>-->
+<!--             -->
+<!--        </div>-->
+<!--        <div class="col-10">-->
+<!--           {{ form.why_this_place.label }}-->
+<!--            {{ form.why_this_place }}-->
+<!--        </div>-->
+<!--    </div>-->
+<!--        <input type="submit" value="Save">-->
+        <button type="submit" class="btn btn-primary">Save</button>
     </form>
 </div>
 {% endblock %}
