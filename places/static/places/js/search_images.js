@@ -17,6 +17,7 @@ function loadImg(destination){
   const url = `https://api.unsplash.com/search/photos/?query=${destination}&per_page=4&client_id=${api_key}`
   fetch(url)
     .then(response=>{
+
       if (response.ok){
         return response.json()
       }else {

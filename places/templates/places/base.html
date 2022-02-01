@@ -38,9 +38,16 @@
                         <li><a class="dropdown-item" href="{% url 'Touristplaces' %}">Tourist places</a></li>
                         <li><a class="dropdown-item" href="{% url 'TouristplacesForm' %}">Touristplaces User Form</a>
                         </li>
+
                     </ul>
+
                 </li>
             </ul>
+
+            <span class="navbar-text"> {{ request.user | capfirst }} </span>
+
+            <span class="navbar-text"> <a class="nav-link" href="{% url 'logout' %}">logout</a> </span>
+
         </div>
     </div>
 </nav>

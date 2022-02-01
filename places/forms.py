@@ -1,5 +1,6 @@
 from django.forms import ModelForm
 from .models import Destination, TouristPlaces
+from django import forms
 
 class DestinationForm(ModelForm):
     class Meta:
@@ -12,3 +13,4 @@ class DestinationForm(ModelForm):
             visible.field.widget.attrs['class']='form-control'
 
         self.fields['name_of_the_place'].widget.attrs['autofocus']='autofocus'
+        self.fields['traveller'].widget = forms.HiddenInput()
