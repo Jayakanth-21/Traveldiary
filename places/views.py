@@ -4,42 +4,74 @@ from django.views.generic.base import TemplateView
 from django.views.generic.list import ListView
 from .models import Destination, TouristPlaces
 from django.views.generic.edit import CreateView
-from django.views.generic.edit import UpdateView
+from django.views.generic.edit import UpdateView, FormView
 from django.views.generic.edit import DeleteView
 from django.urls import reverse_lazy
-from .forms import DestinationForm
+from .forms import DestinationForm, Register
 from django.contrib.auth import logout
 from django.shortcuts import HttpResponseRedirect
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Avg, Count, Min, Sum
 
 def index(request):
     return HttpResponse("Hello, world!. You're at the polls index.")
 
 
-class HomePageView(TemplateView):
+class HomePageView(LoginRequiredMixin,TemplateView):
 
     template_name = "places/home.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['variant']='Traveldiary'
-        print(Destination.objects.all())  # Fetches all the records from the database of destination model
+        # print(Destination.objects.all())  # Fetches all the records from the database of destination model
         return context
 
 
 class DestinationListView(ListView):
 
-    model = Destination
+    # model = Destination
     template_name = 'places/Destinationlist.html'
 
     def get_queryset(self):
+        # Are we overriding it by calling with the default name
         traveller_specific = Destination.objects.filter(traveller=self.request.user)
         return traveller_specific
+
+    def get_context_data(self, **kwargs):
+        """ the purpose of using this method is to display the additional data in template page"""
+        context = super().get_context_data(**kwargs)
+        # method 1: Using aggregation from Django.
+        total_budget =Destination.objects.filter(traveller=self.request.user).aggregate(total_budget=Sum('budget'))
+        context['total_budget']= total_budget["total_budget"]
+        return context
+        # Method 2: Using for loop
+        # traveller_specific = Destination.objects.filter(traveller=self.request.user)
+        # budget = 0
+        # for cost in traveller_specific:
+        #     budget += cost.budget
+        # context['total_budget'] = budget
+        # return context
+
 
 
 class TouristListView(ListView):
 
     model = TouristPlaces
     template_name = 'places/display_touristplaces.html'
+
+    def get_queryset(self):
+        """ get_queryset is a default Django method which fetches all the available particular model data from the database. """
+
+        # qs = super().get_queryset()
+        # for q in qs:
+        #     print(q)
+        #     Django template language can only be use with template files
+        # traveller_specific = TouristPlaces.objects.filter(traveller=self.request.user)
+        traveller_specific = TouristPlaces.objects.filter(destination__traveller=self.request.user)
+        return traveller_specific
+
+
 
 
 class DestinationCreateView(CreateView):
@@ -54,27 +86,23 @@ class DestinationCreateView(CreateView):
     def get_initial(self):
         data = {'traveller':self.request.user}
         return data
-    # def form_valid(self, form):
-    #     t_count = Destination.objects.count()
-    #     if t_count >= 10:
-    #         print("only 10 allowed")
-    #
-    #     else:
-    #         return super().form_valid(form)
+    def form_valid(self, form):
+        t_count = Destination.objects.count()
+        if t_count >= 10:
+            print("only 10 allowed")
+        else:
+            return super().form_valid(form)
 
 class TouristPlacesCreateView(CreateView):
 
     model = TouristPlaces
-    fields = ['name_of_tourist_place','destination']
+    fields = ['name_of_tourist_place','destination','traveller']
     template_name = 'places/Touristplacesform.html'
-    success_url = reverse_lazy('TouristplacesForm')
+    success_url = reverse_lazy('index')
 
-def logout_view(request):
-
-    logout(request)
-    return HttpResponseRedirect(reverse_lazy('login'))
-
-
+    def get_initial(self):
+        data = {'traveller': self.request.user}
+        return data
 
 
 
@@ -93,7 +121,28 @@ class DestinationUpdateView(UpdateView):
     template_name = 'places/Destination_update_form.html'
     success_url = reverse_lazy('index')
 
-class DestinationDelteview(DeleteView):
+class DestinationDeleteview(DeleteView):
 
     model = Destination
     success_url = reverse_lazy('destinationlist')
+
+
+class NewUser(FormView):
+
+    form_class = Register
+    template_name = 'places/user_registration.html'
+    # success_url = reverse_lazy('login')
+
+    def form_valid(self, form):
+
+        form.save()
+        username = form.cleaned_data.get('username')
+        print(username)
+        return HttpResponseRedirect (reverse_lazy('login'))
+
+
+
+def logout_view(request):
+
+    logout(request)
+    return HttpResponseRedirect(reverse_lazy('login'))

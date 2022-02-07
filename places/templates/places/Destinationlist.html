@@ -20,6 +20,7 @@
                 <th scope="col">#</th>
                 <th scope="col">Destination</th>
                 <th scope="col">Why this place</th>
+                <th scope="col">Budget</th>
 
             </tr>
             </thead>
@@ -29,12 +30,17 @@
                 <th scope="row">{{forloop.counter}}</th>
                 <td class="dest_name"><a href="{% url 'Destination_update' dest.pk %}"> {{ dest|upper }} </a></td>
                 <td>{{ dest.why_this_place|upper }}</td>
+                <td>{{ dest.budget }}</td>
                 <td><a href="{% url 'Destination_delete' dest.pk %}"> delete </a></td>
 
             </tr>
             {% endfor %}
             </tbody>
         </table>
+       {% comment %}
+        {{total_budget}} - This variable is comming from views/get_context_data
+        {% endcomment %}
+        <div> total_budget - {{total_budget}} </div>
     </div>
     <div class="col">
         <div id="img_col" class="wrapper"></div>

@@ -2,13 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Touristplaces Form</title>
+    <title>Title</title>
 </head>
 <body>
+<h3>  Create your Account </h3>
+
 <form method="post">{% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" value="Save">
+    <button type= "submit"> SIGN UP </button>
+
 </form>
 </body>
 </html>
-
