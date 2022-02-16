@@ -1,8 +1,23 @@
 {% extends "places/base.html" %}
 
 {% block content %}
+<style>
+    .errorlist {
+    color:red;
+    background-color: lightgreen;
+    }
+
+</style>
 <h2> Hello Destination User</h2>
 <div class="container">
+
+    {% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    {% if message.tags %} {% endif %} <span class="text-white bg-danger"> {{ message }}</span>
+    {% endfor %}
+</ul>
+{% endif %}
 
 
     <form method="post">{% csrf_token %}

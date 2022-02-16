@@ -12,6 +12,51 @@
   </style>
 
 
+<table class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Destination</th>
+                <th scope="col">Visited</th>
+                 <th scope="col">Temp(C)</th>
+                <th scope="col">Why this place</th>
+                <th scope="col">Budget</th>
+
+
+            </tr>
+            </thead>
+            <tbody>
+            {% for weather in city_weather %}
+            <tr>
+                <th scope="row">{{forloop.counter}}</th>
+                {% if weather.already_visited %}
+                <td class="dest_name">{{ weather.name_of_the_place|upper }}</td>
+                {% else %}
+
+                <td class="dest_name"> <a href="{% url 'Destination_update' weather.id %}"> {{ weather.name_of_the_place|upper }}</a></td>
+                {% endif %}
+                <td>{{ weather.already_visited|yesno:"YES, NO" }}</td>
+                <td>{% if weather.temp > 20 %}
+                    <span class="text-white bg-danger"> {{ weather.temp }} HOT </span>
+                    {% else %}
+
+                    <span class="text-white bg-primary"> {{ weather.temp }} Cold </span>
+
+                    {% endif %}
+
+                </td>
+
+                <td>{{ weather.why_this_place|upper }}</td>
+                <td>{{ weather.budget }}</td>
+                <td><a href="{% url 'Destination_delete' weather.id %}"> delete </a></td>
+
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <div> Total_budget = {{ total_budget }} </div>
+
 <div class="row">
     <div class="col">
         <table class="table table-hover">
@@ -41,6 +86,12 @@
         {{total_budget}} - This variable is comming from views/get_context_data
         {% endcomment %}
         <div> total_budget - {{total_budget}} </div>
+        <ul>
+
+            {% for key,value in weather_dict.items %}
+                <li> {{ key }} - {{ value }}</li>
+            {% endfor %}
+        </ul>
     </div>
     <div class="col">
         <div id="img_col" class="wrapper"></div>
