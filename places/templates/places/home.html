@@ -1,18 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "places/base.html" %}
 
-<h1> HomePage </h1>
-<h3> Traveldiary </h3>
-<ul><li>
-<a href = "{% url 'destinationlist' %}"> Destination List </a> </li>
-    <li><a href = "{% url 'Touristplaces' %}"> Tourist places </a> </li>
+{% block content %}
 
+<div class="container">
+
+    <h1> HomePage </h1>
+    <h3> Traveldiary </h3>
+    {% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    {% if message.tags %} {% endif %} <span class="text-white bg-danger"> {{ message }}</span>
+    {% endfor %}
 </ul>
-{{ variant }}
-</body>
-</html>
+{% endif %}
+    <ul>
+        <li>
+            <a href="{% url 'destinationlist' %}"> Destination List </a></li>
+        <li><a href="{% url 'Touristplaces' %}"> Tourist places </a></li>
+        <li><a href="{% url 'DestinationForm' %}"> Destination User Form </a></li>
+        <li><a href="{% url 'TouristplacesForm' %}"> Touristplaces User Form </a></li>
+        {% comment %}
+        <li><a href="{% url 'Destination_update' %}"> Destination Update </a></li>
+        {%endcomment%}
+
+        <h5> Testing out</h5>
+
+    </ul>
+    {{ variant }}
+</div>
+{% endblock %}
